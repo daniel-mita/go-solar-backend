@@ -7,6 +7,7 @@ import sequelize from "./config/sequelize/connection"
 import swaggerJsDoc from "swagger-jsdoc"
 import swaggerUI from "swagger-ui-express"
 import userRoute from "./routes/userRoute"
+import imageRoute from "./routes/imageRoute"
 
 const app = express()
 dotenv.config()
@@ -23,29 +24,28 @@ app.use(function (req, res, next) {
   next()
 })
 
-
 const options = {
-	definition: {
-		openapi: "3.0.0",
-		info: {
-			title: "Library API",
-			version: "1.0.0",
-			description: "A simple Express Library API",
-		},
-		servers: [
-			{
-				url: `http://localhost:${PORT}`,
-			},
-		],
-	},
-	apis: ["./routes/*.ts"],
-};
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Library API",
+      version: "1.0.0",
+      description: "A simple Express Library API",
+    },
+    servers: [
+      {
+        url: `http://localhost:${PORT}`,
+      },
+    ],
+  },
+  apis: ["./routes/*.ts"],
+}
 
-const specs = swaggerJsDoc(options);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+const specs = swaggerJsDoc(options)
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 
 app.use(morgan("dev"))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
@@ -63,10 +63,11 @@ app.listen(PORT, () => {
   console.log(`Now listening on port ${PORT}`)
 })
 
-app.use('/user', userRoute);
+app.use("/user", userRoute)
+app.use("/image", imageRoute)
 
-app.use("*", (err, req, res, next) => {
-  res.status(err.code).json({
-    message: err.message,
-  })
-})
+// app.use("*", (err, req, res, next) => {
+//   res.status(err.code).json({
+//     message: err.message,
+//   })
+// })
