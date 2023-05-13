@@ -3,6 +3,13 @@ import fs from "fs/promises"
 import sharp from "sharp"
 import events from "events"
 import { spawn } from "child_process"
+import { Request, Response } from "express"
+import {
+  createImage,
+  findAllImages,
+  removeImage,
+} from "../repository/imageRepository"
+import { fetchUserById } from "../repository/userRepository"
 
 const readFile = async () => {
   const filePath = path.join(
@@ -20,11 +27,9 @@ const readFile = async () => {
 async function resizeImage(buf: Buffer) {
   try {
     // const metadata = await sharp(buf).metadata()
-    // console.log(metadata)
     await sharp(buf)
       .resize({
-        height: 105,
-        width: 60,
+        width: 105,
       })
       .toFile(`./src/imageGenerator/resized.jpg`)
   } catch (error) {
@@ -33,7 +38,7 @@ async function resizeImage(buf: Buffer) {
   }
 }
 
-const uploadImage = async (req, res) => {
+const uploadImage = async (req: Request, res: Response) => {
   const file = req.body.image
   const myEmitter = new events.EventEmitter()
 
@@ -82,4 +87,60 @@ const uploadImage = async (req, res) => {
   }
 }
 
-export { uploadImage }
+const fetchImages = async (req: any, res: Response) => {
+  const userId = req.userData.userId
+
+  try {
+    const images = await findAllImages(userId)
+
+    res.status(200).json({ images: images })
+  } catch (err: any) {
+    console.log(err)
+    return res.status(500).json({
+      error: {
+        message: err.message,
+      },
+    })
+  }
+}
+
+const saveImage = async (req: any, res: Response) => {
+  const imageData = req.body.image
+  const userId = req.userData.userId
+
+  try {
+    const user = await fetchUserById(userId)
+    console.log(user)
+    if (user === null) throw new Error()
+    const result = await createImage(imageData, user)
+    if (result) {
+      res.status(200).json(result)
+    }
+  } catch (err: any) {
+    console.log(err)
+    return res.status(500).json({
+      error: {
+        message: err.message,
+      },
+    })
+  }
+}
+
+const deleteImage = async (req: Request, res: Response) => {
+  const id = req.params.id
+
+  try {
+    const result = await removeImage(id!.toString())
+    if (result) {
+      res.status(200).json(result)
+    }
+  } catch (err: any) {
+    return res.status(500).json({
+      error: {
+        message: err.message,
+      },
+    })
+  }
+}
+
+export { uploadImage, saveImage, fetchImages, deleteImage }

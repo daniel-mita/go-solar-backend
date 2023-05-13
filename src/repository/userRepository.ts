@@ -1,4 +1,4 @@
-import { User } from "../models/User"
+import { User } from "../models"
 
 const fetchUserById = async (id: string) => {
   return await User.findOne({ where: { id: id } })

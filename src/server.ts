@@ -6,8 +6,10 @@ import morgan from "morgan"
 import sequelize from "./config/sequelize/connection"
 import swaggerJsDoc from "swagger-jsdoc"
 import swaggerUI from "swagger-ui-express"
+
 import userRoute from "./routes/userRoute"
 import imageRoute from "./routes/imageRoute"
+import calculationsRoute from "./routes/calculationsRoute"
 
 const app = express()
 dotenv.config()
@@ -45,7 +47,7 @@ const specs = swaggerJsDoc(options)
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs))
 
 app.use(morgan("dev"))
-app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.json({ limit: "50mb" }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
@@ -65,6 +67,7 @@ app.listen(PORT, () => {
 
 app.use("/user", userRoute)
 app.use("/image", imageRoute)
+app.use("/results", calculationsRoute)
 
 // app.use("*", (err, req, res, next) => {
 //   res.status(err.code).json({

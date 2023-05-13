@@ -1,6 +1,24 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import random from "random"
 import { createUser, fetchUserByEmail } from "../repository/userRepository"
+
+const avatars = [
+  "Shadow",
+  "Garfield",
+  "Harley",
+  "Maggie",
+  "Cleo",
+  "Fluffy",
+  "Daisy",
+  "Abby",
+  "Fluffy",
+]
+
+const randomAvatar = () => {
+  const index = random.int(0, 8)
+  return avatars[index]
+}
 
 //login, user logins with email and password
 const loginUser = async (req, res) => {
@@ -37,6 +55,7 @@ const loginUser = async (req, res) => {
             return res.status(200).json({
               message: "Auth successful",
               token: token,
+              avatarSeed: user.avatarSeed,
               user: user.username,
             })
           }
@@ -85,6 +104,7 @@ const signupUser = async (req, res) => {
       }
       payload.password = hash
       try {
+        payload.avatarSeed = randomAvatar()
         const result = await createUser(payload)
         if (result) {
           res.status(200).json(result)

@@ -1,14 +1,20 @@
-import { Model, DataTypes } from "sequelize"
+import { Model, DataTypes, Association } from "sequelize"
 import sequelize from "../config/sequelize/connection"
+import { Image } from "./Image"
 
 class User extends Model {
   declare id: string
   declare email: string
   declare username: string
   declare password: string
+  declare avatarSeed: string
 
   declare readonly createdAt: Date
   declare readonly updatedAt: Date
+
+  public static associations: {
+    images: Association<User, Image>
+  }
 }
 
 User.init(
@@ -22,6 +28,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     username: {
       type: DataTypes.STRING,
@@ -31,9 +38,13 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    avatarSeed: {
+      type: DataTypes.STRING,
+    },
   },
   {
     sequelize,
+    tableName: "users",
     timestamps: true,
     modelName: "User",
   }
