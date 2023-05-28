@@ -73,10 +73,6 @@ const uploadImage = async (req: Request, res: Response) => {
       return res.status(200).json({ image: image })
     })
 
-    // fs.unlink(filePath, (err) => {
-    //   if (err) throw err
-    //   console.log("path/file.txt was deleted")
-    // })
   } catch (err: any) {
     console.log(err)
     res.status(500).json({

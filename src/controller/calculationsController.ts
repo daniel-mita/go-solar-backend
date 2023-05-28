@@ -116,7 +116,6 @@ const computePanelsData = async (
 
   const producedElectricity = averageAnnualEnergyProduction - annualConsumption
 
-
   return {
     averageAnnualEnergyProduction,
     capacity,
@@ -162,6 +161,11 @@ const calculatePositioning = async (req: Request, res: Response) => {
       (geographicPolygonArea - (geographicPolygonArea * reservedSpace) / 100) /
         panelArea
     ) // number of panels if the polygon provided is convex or there is an error in the coordinates provided
+  } else {
+    numberOfPanels = Math.floor(
+      (rectangleData.area - (rectangleData.area * reservedSpace) / 100) /
+        panelArea
+    )
   }
 
   let panelsData = await computePanelsData(
