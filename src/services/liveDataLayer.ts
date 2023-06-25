@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios"
+import { CONVERSION_RATE_API_KEY, SOLAR_DATA_API_KEY } from "../constant"
 
 async function fetchConversionRate(symbols: string[], base: string) {
   try {
-    const apiKey = "glgYhA2vqCkZT99dv5Ig7n4VUYcSj98e"
+    const apiKey = CONVERSION_RATE_API_KEY
     const headers = {
       "Content-Type": "application/json",
       apikey: apiKey,
@@ -23,7 +24,7 @@ async function fetchConversionRate(symbols: string[], base: string) {
 
 async function fetchSolarData(latitude: number, longitude: number, tilt: number, capacity: number) {
   try {
-    const apiKey = "LYClaTIxucFS8OsR6iTuABhg8jy1Hm9jmK85PvVN"
+    const apiKey = SOLAR_DATA_API_KEY
 
     const headers = {
       'Content-Type': 'application/json',

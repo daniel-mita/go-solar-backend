@@ -68,9 +68,3 @@ app.listen(PORT, () => {
 app.use("/user", userRoute)
 app.use("/image", imageRoute)
 app.use("/results", calculationsRoute)
-
-// app.use("*", (err, req, res, next) => {
-//   res.status(err.code).json({
-//     message: err.message,
-//   })
-// })
