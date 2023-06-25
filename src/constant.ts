@@ -1,2 +1,6 @@
-export const CONVERSION_RATE_API_KEY = "glgYhA2vqCkZT99dv5Ig7n4VUYcSj98e"
-export const SOLAR_DATA_API_KEY = "LYClaTIxucFS8OsR6iTuABhg8jy1Hm9jmK85PvVN"
+import dotenv from "dotenv"
+
+dotenv.config()
+
+export const CONVERSION_RATE_API_KEY = process.env.CONVERSION_RATE_API_KEY
+export const SOLAR_DATA_API_KEY = process.env.SOLAR_DATA_API_KEY
